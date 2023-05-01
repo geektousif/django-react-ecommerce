@@ -1,0 +1,46 @@
+Computer Store Ecommerce
+
+	USing DaisyUI -- get components (hyperui)
+
+	Tech Stack:
+		- Django, Rest framework, JWT
+		- Postgresql
+		- React (use Vite), Redux Toolkit
+		- Tailwind + (some UI Component Library)
+		- Paypal / Razorpay / any other
+		- AWS
+		- Docker, -> {then} Deploy
+		- TODO: use RTK Query instead of axios
+		
+		[LATER]
+			- channels, celery, redis
+
+	Features:
+		FIRST COVER EVERYTHING DENNIS COURSE
+		- Register / Login , activate account (activation link/otp) + Addressbook Manage
+		- Forgot password, reset password
+		- Payment Gateway
+		- User Profiles + My Orders
+		- Admin Panel -> Product Manage - Multiple Image/ + User Manage + Orders
+		- Stock + Coupon-Discount
+		- Chat with admin
+		- + - quantity
+		- Number of product in cart icon
+		- Review + Rating
+		- Dark/Light toggle UI
+		- Pagination
+		- Product Filter, Sort, Search
+		- wishlist
+		- Invoice generate
+
+		[LATER] - build your pc
+
+For UI :-
+	resources 
+	https://www.tailwindtoolbox.com/
+	headless ui 
+	daisy ui
+	hyper ui
+	https://tailwindtemplates.co/
+	awesome react component repo
+	https://www.tailwindawesome.com/?price=free
