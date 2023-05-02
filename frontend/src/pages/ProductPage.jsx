@@ -1,52 +1,90 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { FaArrowLeft } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
-
-import products from "../sample-products";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Rating from "../components/Rating";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductDetail } from "../features/product/productDetailSlice";
+import Loading from "../components/Loading";
+import Message from "../components/Message";
+import NumberInput from "../components/NumberInput";
+import { addToCart } from "../features/cart/cartSlice";
 
 const ProductPage = () => {
-  const { id } = useParams();
-  const [product, setProduct] = useState([]);
+  const [quantity, setQuantity] = useState(1);
 
-  async function fetchProduct() {
-    const { data } = await axios.get(`/api/products/${id}`);
-    setProduct(data);
-  }
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { id } = useParams();
+  const { loading, productDetail, error } = useSelector(
+    (state) => state.productDetail
+  );
+
   useEffect(() => {
-    fetchProduct();
-  }, []);
+    dispatch(getProductDetail(id));
+  }, [dispatch, id]);
+
+  const addToCartHandler = (product) => {
+    dispatch(addToCart(product));
+    navigate("/cart");
+  };
+
+  const product = {
+    id: productDetail.id,
+    name: productDetail.name,
+    image: productDetail.image,
+    price: productDetail.price,
+    cartQuantity: quantity,
+  };
 
   return (
-    <div className="w-11/12 mx-auto">
+    <div className="w-full mx-auto">
       <Link to={"/"} className="mb-3 btn btn-ghost">
         <FaArrowLeft className="mr-1" /> Back
       </Link>
-      <div className="flex w-full">
-        <div className="grid flex-grow place-items-center">
-          <img src={product.image} />
+      {loading ? (
+        <Loading />
+      ) : error ? (
+        <Message alert_type="error">{error}</Message>
+      ) : (
+        <div className="flex w-full">
+          <div className="grid flex-grow place-items-center">
+            <img src={productDetail.image} />
+          </div>
+          <div className="divider-horizontal"></div>
+          <div className="flex flex-col flex-grow gap-6">
+            <h2 className="text-2xl">{productDetail.name}</h2>
+            <h4 className="text-xl">Price : ${productDetail.price}</h4>
+            <h6 className="text-lg">
+              Description : ${productDetail.description}
+            </h6>
+            <p>
+              Status -{" "}
+              {productDetail.stock_count > 0 ? "In Stock" : "Out of Stock"}
+            </p>
+            <Rating
+              rating={productDetail.rating}
+              text={`${productDetail.numReviews} reviews`}
+            />
+            {productDetail.stock_count > 0 ? (
+              <div className="flex items-center">
+                Quantity :{" "}
+                <NumberInput value={quantity} onChange={setQuantity} />
+              </div>
+            ) : (
+              ""
+            )}
+
+            <button
+              onClick={() => addToCartHandler(product)}
+              className="btn btn-secondary"
+              disabled={productDetail.stock_count == 0}
+            >
+              Add to Cart
+            </button>
+          </div>
         </div>
-        <div className="divider-horizontal"></div>
-        <div className="flex flex-col flex-grow gap-6">
-          <h2 className="text-2xl">{product.name}</h2>
-          <h4 className="text-xl">Price : ${product.price}</h4>
-          <h6 className="text-lg">Description : ${product.description}</h6>
-          <p>
-            Status - {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
-          </p>
-          <Rating
-            rating={product.rating}
-            text={`${product.numReviews} reviews`}
-          />
-          <button
-            className="btn btn-secondary"
-            disabled={product.stock_count == 0}
-          >
-            Add to Cart
-          </button>
-        </div>
-      </div>
+      )}
     </div>
   );
 };

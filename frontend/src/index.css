@@ -3,5 +3,13 @@
 @tailwind utilities;
 
 .h1 {
-  @apply text-3xl font-semibold leading-normal mt-0 mb-2;
+  @apply mt-0 mb-2 text-3xl font-semibold leading-normal;
+}
+
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
